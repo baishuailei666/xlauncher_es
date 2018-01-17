@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="xlauncher_es:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="xlauncher_es-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="xlauncher_es:war exploded" />
+    </root>
+  </artifact>
+</component>

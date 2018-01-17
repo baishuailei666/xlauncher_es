@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+namespace是该xml对应的接口全名，select和update中的id对应方法名，resultType是返回值类型，parameterType是参数类型（这个其实可选），
+最后#{...}中填写的是方法的参数，-->
+
+
+<mapper namespace="ssm.dao.AlertEventDao">
+
+    <!-- 添加事件信息-->
+    <insert id="addEvent" parameterType="ssm.entity.AlertEvent">
+        INSERT INTO es_alert_event(
+            event_id,event_starttime,event_cam_id,type_id,event_source
+        )
+        VALUES
+        (#{event_id},#{event_starttime},#{event_cam_id},#{type_id},#{event_source})
+
+    </insert>
+
+
+    <!-- 更新事件信息的状态-->
+    <update id="updateEventStatus" parameterType="ssm.entity.AlertEvent">
+        UPDATE es_alert_event
+        SET
+            <if test="event_status != null and event_status !=''">
+            event_status=#{event_status},
+            </if>
+            <if test="event_endtime !=null and event_endtime !=''">
+            event_endtime=#{event_endtime}
+            </if>
+        WHERE event_id=#{event_id}
+
+    </update>
+
+
+    <!-- 查询所有事件信息-->
+    <select id="getAllEvents" parameterType="int" resultType="ssm.entity.EventData">
+        SELECT
+        es_alert_event.event_id,
+        es_alert_event.event_starttime,
+        es_event_type.type_description,
+        es_alert_event.event_cam_id,
+        es_alert_event.event_source,
+        es_alert_event.event_status,
+        es_alert_event.event_endtime
+        FROM
+        es_alert_event ,
+        es_event_content ,
+        es_event_type
+        WHERE es_alert_event.type_id=es_event_type.type_id
+        AND es_alert_event.content_id=es_event_content.content_id
+
+    </select>
+
+    <!--根据id查询-->
+    <select id="getEventById" parameterType="int" resultType="ssm.entity.AlertEvent">
+        SELECT
+        es_alert_event.event_id,
+        es_alert_event.event_starttime,
+        es_event_type.type_description,
+        es_alert_event.event_cam_id,
+        es_alert_event.event_source,
+        es_alert_event.event_status,
+        es_alert_event.event_endtime
+        FROM
+        es_alert_event ,
+        es_event_content ,
+        es_event_type
+        WHERE es_alert_event.type_id=es_event_type.type_id
+        AND es_alert_event.content_id=es_event_content.content_id
+        AND es_alert_event.event_id=#{event_id}
+    </select>
+
+
+
+    <!-- 根据输入参数 查询所有事件信息-->
+    <select id="getEventFromParam" parameterType="int" resultType="ssm.entity.EventData">
+        SELECT
+        es_alert_event.event_id,
+        es_alert_event.event_starttime,
+        es_event_content.content_description,
+        es_event_type.type_description,
+        es_alert_event.event_location,
+        es_alert_event.event_cam_id,
+        es_alert_event.event_source,
+        es_alert_event.event_status,
+        es_alert_event.event_push_status,
+        es_alert_event.event_endtime
+        FROM
+        es_alert_event ,
+        es_event_content ,
+        es_event_type
+        WHERE es_alert_event.type_id=es_event_type.type_id
+        AND es_alert_event.content_id=es_event_content.content_id
+        <choose>
+            <when test="event_starttime != null and event_starttime != ''">
+                AND event_starttime=#{event_starttime}
+            </when>
+            <when test="event_location != null and event_location != ''">
+                AND event_location=#{event_location}
+            </when>
+            <when test="event_cam_id != null and event_cam_id != ''">
+                AND event_cam_id=#{event_cam_id}
+            </when>
+            <when test="type_id != null and type_id != ''">
+                AND type_id=#{type_id}
+            </when>
+            <when test="content_id != null and content_id != ''">
+                AND content_id=#{content_id}
+            </when>
+            <when test="event_status != null and event_status != ''">
+                AND event_status=#{event_status}
+            </when>
+            <when test="event_push_status != null and event_push_status != ''">
+                AND event_push_status=#{event_push_status}
+            </when>
+            <when test="event_endtime != null and event_endtime != ''">
+                AND event_endtime=#{event_endtime}
+            </when>
+            <otherwise>
+                AND event_id=#{event_id}
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>
