@@ -1,6 +1,8 @@
 package ssm.entity;
 
-
+/**
+ * 事件内容实体类
+ */
 public class EventContent {
 
     private int content_id; // 事件内容编号

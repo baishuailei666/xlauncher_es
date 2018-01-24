@@ -10,9 +10,11 @@ import java.util.Properties;
 public class PropertyTest {
     public static void main(String[] args) {
         Properties properties = new Properties();
+        String fileIn = "aa.properties";
+        String fileTo = "D:\\Launcher\\resources\\ab.properties";
         try{
             // 读取指定属性文件 通过类加载器进行获取properties文件流
-            InputStream in = PropertyTest.class.getClassLoader().getResourceAsStream("aa.properties");
+            InputStream in = PropertyTest.class.getClassLoader().getResourceAsStream(fileIn);
 
 //            InputStream in = new BufferedInputStream (new FileInputStream("a.properties"));
 //            这个方式 会报系统找不到文件异常错误
@@ -31,10 +33,10 @@ public class PropertyTest {
 
             // 保存属性到指定文件
             // true表示打开追加方式
-            FileOutputStream fos = new FileOutputStream("D:\\Launcher\\resources\\ab.properties");
+            FileOutputStream fos = new FileOutputStream(fileTo);
             properties.setProperty("CMS.name","CMS");
             properties.setProperty("CMS.ip","192.168.0.18");
-            properties.setProperty("CMS.port","9002");
+            properties.setProperty("CMS.port","9000");
 
 
             // 这个方法将Properties类对象的属性列表保存到输出流中

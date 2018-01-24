@@ -1,6 +1,7 @@
 package ssm.web;
 
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class EventContentController {
     @Autowired
     private EventContentService eventContentService;
+    private static Logger logger = Logger.getLogger(EventContentController.class);
 
     /**
      * 添加事件描述信息
@@ -29,6 +31,7 @@ public class EventContentController {
     @RequestMapping(method = RequestMethod.POST)
     public Map<String, Object> addEventContent(@RequestBody EventContent eventContent) {
         int ret = this.eventContentService.addEventContent(eventContent);
+        logger.info("添加事件描述信息");
         Map<String, Object> retMap = new HashMap<>(1);
         retMap.put("status", ret);
         return retMap;
@@ -43,6 +46,7 @@ public class EventContentController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Map<String, Object> deleteEventContentById(@PathVariable("id") String id) {
         int ret = this.eventContentService.deleteEventContent(Integer.parseInt(id));
+        logger.info("删除"+id+"事件描述信息");
         Map<String, Object> retMap = new HashMap<>(1);
         retMap.put("status", ret);
         return retMap;
@@ -57,6 +61,7 @@ public class EventContentController {
     @RequestMapping(value = "/post", method = RequestMethod.PUT)
     public Map<String, Object> updateEventContent( @RequestBody EventContent eventContent) {
         int retUpd = this.eventContentService.updateEventContent(eventContent);
+        logger.info("修改事件描述信息");
         Map<String, Object> map = new HashMap<>(1);
         map.put("status", retUpd);
         return map;
@@ -71,6 +76,7 @@ public class EventContentController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public EventContent getEventContentById(@PathVariable("id") String id) {
         int content_id = Integer.parseInt(id);
+        logger.info("查询"+id+"事件描述信息");
         EventContent eventContent = this.eventContentService.getEventContent(content_id);
         return eventContent;
     }
@@ -82,6 +88,7 @@ public class EventContentController {
     @ResponseBody
     @RequestMapping( method = RequestMethod.GET)
     public Map<String, Object> getAllEventsContent() {
+        logger.info("查询所有事件描述信息");
         List<EventContent> lstEventContent = this.eventContentService.getAllEventsContent();
         Map<String, Object> userMap = new HashMap<>(2);
         userMap.put("eventContentList", lstEventContent);

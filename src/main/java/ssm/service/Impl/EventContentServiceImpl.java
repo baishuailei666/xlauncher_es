@@ -12,6 +12,8 @@ import java.util.List;
 @Service
 public class EventContentServiceImpl implements EventContentService {
 
+
+
     @Qualifier("eventContentDao")
     @Autowired
     private EventContentDao EventContentDao;

@@ -1,5 +1,8 @@
 package ssm.entity;
 
+/**
+ * 事件类型实体类
+ */
 public class EventType {
 
     private int type_id;    //事件类型编号

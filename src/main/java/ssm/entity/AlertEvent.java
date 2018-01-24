@@ -1,5 +1,8 @@
 package ssm.entity;
 
+/**
+ * 事件实体类
+ */
 public class AlertEvent {
 
     //实体类的属性和表中字段一致
@@ -11,30 +14,9 @@ public class AlertEvent {
     private int type_id;    //事件所属类型编号
     //private int content_id; //事件所属内容编号
     private String event_source;    //事件资源描述
-    private String event_status;    //事件目前状态
+    private int status_id;    //事件目前状态编号
     //private String event_push_status;   //事件推送状态
     private String event_endtime;   //事件处理时间
-
-
-    public AlertEvent(int event_id, String event_starttime, String event_location, int event_cam_id, int type_id, int content_id, String event_source, String event_status, String event_push_status, String event_endtime){
-        this.event_id = event_id;
-        this.event_starttime = event_starttime;
-        //this.event_location = event_location;
-        this.event_cam_id = event_cam_id;
-        this.type_id = type_id;
-        //this.content_id = content_id;
-        this.event_source = event_source;
-        this.event_status = event_status;
-        //this.event_push_status = event_push_status;
-        this.event_endtime = event_endtime;
-    }
-
-    public AlertEvent(int event_id, String event_status, String event_push_status, String event_endtime){
-        this.event_id = event_id;
-        this.event_status = event_status;
-        //this.event_push_status = event_push_status;
-        this.event_endtime = event_endtime;
-    }
 
     public AlertEvent(){
 
@@ -56,10 +38,6 @@ public class AlertEvent {
         this.event_starttime = event_starttime;
     }
 
-
-
-
-
     public int getEvent_cam_id() {
         return event_cam_id;
     }
@@ -76,8 +54,6 @@ public class AlertEvent {
         this.type_id = type_id;
     }
 
-
-
     public String getEvent_source() {
         return event_source;
     }
@@ -86,12 +62,12 @@ public class AlertEvent {
         this.event_source = event_source;
     }
 
-    public String getEvent_status() {
-        return event_status;
+    public int getStatus_id() {
+        return status_id;
     }
 
-    public void setEvent_status(String event_status) {
-        this.event_status = event_status;
+    public void setStatus_id(int status_id) {
+        this.status_id = status_id;
     }
 
 
@@ -108,7 +84,7 @@ public class AlertEvent {
 
         return  "事件告警： [事件编号："+event_id+" 事件发生时间："+event_starttime+"" +
                 " 事件对应摄像头编号："+event_cam_id+" 事件类型编号："+type_id+" " +
-                " 事件资源："+event_source+" 事件状态："+event_status+" 事件处理时间："+event_endtime+"] ";
+                " 事件资源："+event_source+" 事件状态："+status_id+" 事件处理时间："+event_endtime+"] ";
 
     }
 

@@ -1,6 +1,7 @@
 package ssm.web;
 
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,12 @@ import java.util.Map;
  * 用户订阅操作控制器
  */
 @Controller
-@RequestMapping("/es_user_subscription")
+@RequestMapping("/es/es_user_subscription")
 public class UserSubscriptionController {
 
     @Autowired
     private UserSubscriptionService userSubscriptionService;
-
+    private static Logger logger = Logger.getLogger(UserSubscriptionController.class);
 
     /**
      * 添加用户
@@ -33,6 +34,7 @@ public class UserSubscriptionController {
     @RequestMapping(method = RequestMethod.POST)
     public Map<String, Object> addUserSub(@RequestBody UserSubscription userSubscription) {
         int ret = this.userSubscriptionService.addUserSub(userSubscription);
+        logger.info("添加用户订阅信息");
         Map<String, Object> retMap = new HashMap<>(1);
         retMap.put("status", ret);
         return retMap;
@@ -47,6 +49,7 @@ public class UserSubscriptionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Map<String, Object> deleteUserSubById(@PathVariable("id") String id) {
         int ret = this.userSubscriptionService.deleteUserSub(Integer.parseInt(id));
+        logger.info("删除"+id+"用户订阅信息");
         Map<String, Object> retMap = new HashMap<>(1);
         retMap.put("status", ret);
         return retMap;
@@ -61,6 +64,7 @@ public class UserSubscriptionController {
     @RequestMapping( method = RequestMethod.PUT)
     public Map<String, Object> updateUserSub( @RequestBody UserSubscription userSubscription) {
         int retUpd = this.userSubscriptionService.updateUserSub(userSubscription);
+        logger.info("修改用户订阅信息");
         Map<String, Object> map = new HashMap<>(1);
         map.put("status", retUpd);
         return map;
@@ -75,6 +79,7 @@ public class UserSubscriptionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public UserSubscription getUserSubById(@PathVariable("id") String id) {
         int user_id = Integer.parseInt(id);
+        logger.info("查询ID:"+user_id+"的用户订阅信息");
         UserSubscription userSub = this.userSubscriptionService.getUserSubById(user_id);
         return userSub;
     }
@@ -86,6 +91,7 @@ public class UserSubscriptionController {
     @ResponseBody
     @RequestMapping( method = RequestMethod.GET)
     public Map<String, Object> getAllUsersSub() {
+        logger.info("查询所有用户订阅信息");
         List<UserSubscription> lstUsersSub = this.userSubscriptionService.getAllUsersSub();
         Map<String, Object> userMap = new HashMap<>(2);
         userMap.put("userSubList", lstUsersSub);

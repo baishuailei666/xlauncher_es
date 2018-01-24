@@ -1,6 +1,9 @@
 package ssm.entity;
 
 
+/**
+ * 事件信息实体类
+ */
 public class EventData {
     //实体类的属性和表中字段一致
 

@@ -1,5 +1,9 @@
 package ssm.entity;
 
+
+/**
+ * 用户订阅信息实体类
+ */
 public class UserData {
 
     private int user_id;    //用户id

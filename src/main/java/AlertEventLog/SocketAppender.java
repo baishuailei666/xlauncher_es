@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public interface SocketAppender {
+public class SocketAppender {
 
     public static void main(String[] args) throws Exception {
 

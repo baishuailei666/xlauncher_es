@@ -13,14 +13,16 @@
     <schema id="7" parent="1" name="sys"/>
     <table id="8" parent="2" name="es_alert_event"/>
     <table id="9" parent="2" name="es_event_content"/>
-    <table id="10" parent="2" name="es_event_type"/>
-    <table id="11" parent="2" name="es_user_subscription"/>
-    <table id="12" parent="2" name="sequence"/>
-    <table id="13" parent="2" name="userinfo"/>
-    <routine id="14" parent="2" name="nextval">
+    <table id="10" parent="2" name="es_event_status"/>
+    <table id="11" parent="2" name="es_event_type"/>
+    <table id="12" parent="2" name="es_user_subscription"/>
+    <table id="13" parent="2" name="sequence"/>
+    <table id="14" parent="2" name="userinfo"/>
+    <table id="15" parent="2" name="usertest"/>
+    <routine id="16" parent="2" name="nextval">
       <RoutineKind>function</RoutineKind>
     </routine>
-    <column id="15" parent="8" name="event_id">
+    <column id="17" parent="8" name="event_id">
       <Position>1</Position>
       <Comment>事件编号：&#xd;
 4位年2位月2位日2位时2位秒(如：20171218163425)2位事件类型4位事件序列号(如：01表示危险事件；02表示严重事件；03表示一般事件；04表示警告事件)最终编号：20171218163425040001&#xd;
@@ -28,203 +30,236 @@
       <DataType>int(25)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="16" parent="8" name="event_starttime">
+    <column id="18" parent="8" name="event_starttime">
       <Position>2</Position>
       <Comment>事件发生事件</Comment>
       <DataType>datetime|0</DataType>
     </column>
-    <column id="17" parent="8" name="event_location">
+    <column id="19" parent="8" name="event_location">
       <Position>3</Position>
       <Comment>事件发生的地点区域</Comment>
       <DataType>varchar(50)|0</DataType>
     </column>
-    <column id="18" parent="8" name="event_cam_id">
+    <column id="20" parent="8" name="event_cam_id">
       <Position>4</Position>
       <Comment>事件所对应的摄像头：&#xd;
 如：拍摄到事件所对应的摄像头编号或者ID&#xd;
 </Comment>
       <DataType>int(20)|0</DataType>
     </column>
-    <column id="19" parent="8" name="type_id">
+    <column id="21" parent="8" name="type_id">
       <Position>5</Position>
       <Comment>事件类型：&#xd;
 如：01表示危险事件；02表示严重事件；03表示一般事件；04表示警告事件&#xd;
 </Comment>
       <DataType>int(10)|0</DataType>
     </column>
-    <column id="20" parent="8" name="content_id">
+    <column id="22" parent="8" name="content_id">
       <Position>6</Position>
       <Comment>事件描述</Comment>
       <DataType>int(10)|0</DataType>
     </column>
-    <column id="21" parent="8" name="event_source">
+    <column id="23" parent="8" name="event_source">
       <Position>7</Position>
       <Comment>事件资源：&#xd;
 如：图片或者短视频&#xd;
 </Comment>
       <DataType>varchar(1024)|0</DataType>
     </column>
-    <column id="22" parent="8" name="event_status">
+    <column id="24" parent="8" name="status_id">
       <Position>8</Position>
       <Comment>事件状态：&#xd;
-如：事件已处理，事件未处理，事件正在处理&#xd;
+如：1表示事件已处理，0表示事件未处理，事件正在处理&#xd;
 </Comment>
-      <DataType>varchar(30)|0</DataType>
+      <DataType>int(10)|0</DataType>
     </column>
-    <column id="23" parent="8" name="event_push_status">
+    <column id="25" parent="8" name="event_push_status">
       <Position>9</Position>
       <Comment>事件推送状态：&#xd;
 如：刚接收到事件是未推送，如果 用户的状态是登录状态，推送以后置为已推送，或者CMS主动通过用户登录触发拉去事件，可以将状态置为已推送。&#xd;
 </Comment>
       <DataType>varchar(30)|0</DataType>
     </column>
-    <column id="24" parent="8" name="event_endtime">
+    <column id="26" parent="8" name="event_endtime">
       <Position>10</Position>
       <Comment>事件结束时间:&#xd;
 回调函数将对应告警的处理完成事件写入数据库&#xd;
 </Comment>
       <DataType>datetime|0</DataType>
     </column>
-    <key id="25" parent="8" name="PRIMARY">
+    <key id="27" parent="8" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>event_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="26" parent="9" name="content_id">
+    <column id="28" parent="9" name="content_id">
       <Position>1</Position>
       <Comment>事件描述编号</Comment>
       <DataType>int(10)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="27" parent="9" name="content_description">
+    <column id="29" parent="9" name="content_description">
       <Position>2</Position>
       <Comment>事件描述具体内容：&#xd;
 如：水面漂流物；水边钓鱼；挖沙船等&#xd;
 </Comment>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="28" parent="9" name="type_id">
+    <column id="30" parent="9" name="type_id">
       <Position>3</Position>
       <Comment>事件类型编号</Comment>
       <DataType>int(10)|0</DataType>
     </column>
-    <key id="29" parent="9" name="PRIMARY">
+    <key id="31" parent="9" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>content_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="30" parent="10" name="type_id">
+    <column id="32" parent="10" name="status_id">
+      <Position>1</Position>
+      <Comment>事件状态编号</Comment>
+      <DataType>int(10)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="33" parent="10" name="event_status">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <key id="34" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>status_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="35" parent="11" name="type_id">
       <Position>1</Position>
       <Comment>事件类型编号</Comment>
       <DataType>int(10)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="31" parent="10" name="type_description">
+    <column id="36" parent="11" name="type_description">
       <Position>2</Position>
       <Comment>事件类型描述：&#xd;
 如：01表示危险事件；02表示严重事件；03表示一般事件；04表示警告事件&#xd;
 </Comment>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <key id="32" parent="10" name="PRIMARY">
+    <key id="37" parent="11" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>type_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="33" parent="11" name="user_id">
+    <column id="38" parent="12" name="user_id">
       <Position>1</Position>
       <DataType>int(10)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="34" parent="11" name="user_name">
+    <column id="39" parent="12" name="user_name">
       <Position>2</Position>
       <Comment>系统用户</Comment>
       <DataType>varchar(20)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="35" parent="11" name="content_id">
+    <column id="40" parent="12" name="content_id">
       <Position>3</Position>
       <Comment>用户订阅事件</Comment>
       <DataType>int(10)|0</DataType>
     </column>
-    <column id="36" parent="11" name="subscription_time">
+    <column id="41" parent="12" name="subscription_time">
       <Position>4</Position>
       <Comment>用户订阅事件的时间：&#xd;
 如：2017年12月19日14时23分&#xd;
 </Comment>
       <DataType>datetime|0</DataType>
     </column>
-    <key id="37" parent="11" name="PRIMARY">
+    <key id="42" parent="12" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>user_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="38" parent="12" name="name">
+    <column id="43" parent="13" name="name">
       <Position>1</Position>
       <DataType>varchar(50)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="39" parent="12" name="current_value">
+    <column id="44" parent="13" name="current_value">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="40" parent="12" name="_increment">
+    <column id="45" parent="13" name="_increment">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;1&apos;</DefaultExpression>
     </column>
-    <key id="41" parent="12" name="PRIMARY">
+    <key id="46" parent="13" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>name</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="42" parent="13" name="id">
+    <column id="47" parent="14" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="43" parent="13" name="name">
+    <column id="48" parent="14" name="name">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="44" parent="13" name="age">
+    <column id="49" parent="14" name="age">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <column id="45" parent="13" name="sex">
+    <column id="50" parent="14" name="sex">
       <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="46" parent="13" name="address">
+    <column id="51" parent="14" name="address">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="47" parent="13" name="money">
+    <column id="52" parent="14" name="money">
       <Position>6</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="48" parent="13" name="time">
+    <column id="53" parent="14" name="time">
       <Position>7</Position>
       <DataType>datetime|0</DataType>
     </column>
-    <column id="49" parent="13" name="sport">
+    <column id="54" parent="14" name="sport">
       <Position>8</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <key id="50" parent="13" name="PRIMARY">
+    <key id="55" parent="14" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <argument id="51" parent="14">
+    <column id="56" parent="15" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="57" parent="15" name="username">
+      <Position>2</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="58" parent="15" name="password">
+      <Position>3</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <key id="59" parent="15" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <argument id="60" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
       <DataType>int(11)|0</DataType>
     </argument>
-    <argument id="52" parent="14" name="n">
+    <argument id="61" parent="16" name="n">
       <DataType>varchar(50)|0</DataType>
     </argument>
   </database-model>

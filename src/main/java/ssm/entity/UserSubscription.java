@@ -1,5 +1,9 @@
 package ssm.entity;
 
+
+/**
+ * 用户订阅实体类
+ */
 public class UserSubscription {
 
     private int user_id;    //用户编号
@@ -10,7 +14,7 @@ public class UserSubscription {
 
 
     public UserSubscription(int user_id, String user_name, int content_id, String subscription_time) {
-        // insert
+
         this.user_id = user_id;
         this.user_name = user_name;
         this.content_id = content_id;

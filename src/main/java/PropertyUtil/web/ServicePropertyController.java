@@ -2,12 +2,13 @@ package PropertyUtil.web;
 
 
 import PropertyUtil.entity.ServicePropertyUtil;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Desc: JAVA程序获取properties文件内容的测试控制器
@@ -19,42 +20,53 @@ import java.util.Properties;
 @RequestMapping("/pro")
 public class ServicePropertyController {
 
+
     /**
      * 不需要注入工具类对象，直接调用静态方法进行获取，而且只加载一次，效率很高
      */
 
+     private static Logger logger = Logger.getLogger(ServicePropertyController.class);
+     private String readPath = "aa.properties";
+     private String writePath = "D:\\Launcher\\resources\\ab.properties";
 
 
     /**
      * 得到JSON格式数据写入指定路径文件
      *
-     * @param map 直接接收JSON格式数据自动转化成map
+     * @param map,readPath,writePath
+     * 直接接收JSON格式数据自动转化成map，readPath需要打开文件的路径，writePath需要写入文件的路径
      *
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public int saveProperty(@RequestBody Map<String, Object> map){
-        // 直接接收JSON数据自动转化成Map
+    public void saveProperty(@RequestBody Map<String, Object> map){
 
+        logger.info("读写properties文件");
         Properties properties = new Properties();
-
-//        // 定义一个MapList接收多个JSON数据
-//        Map<String, Object> mapList = new HashMap<>();
-//        mapList.putAll(map);
 
         try {
             // 读取指定属性文件 通过类加载器进行获取properties文件流
-            InputStream in = ServicePropertyController.class.getClassLoader().getResourceAsStream("aa.properties");
+            InputStream in = ServicePropertyController.class.getClassLoader().getResourceAsStream(readPath);
             // 加载属性文件
             properties.load(in);
             // 关闭流
             in.close();
             // 设置输出流、输出文件路径；true表示追加方式打开
-            FileOutputStream  fos = new FileOutputStream("D:\\Launcher\\resources\\ab.properties",true);
-            // put map集合中的数据
-            properties.putAll(map);
+            FileOutputStream  fos = new FileOutputStream(writePath,true);
 
+            // 迭代循环里面的数据
+            for(String eachKey : map.keySet()){
+                // 循环得到所有的Key
+                for (Object listValue: (ArrayList)map.get(eachKey)) {
+                    // listValue是一个List集合，将List转换成Map
+                    Map mapValue = (Map)listValue;
+                    // 写入properties文件
+                    properties.put(mapValue.get("name")+".name",mapValue.get("name"));
+                    properties.put(mapValue.get("name")+".ip",mapValue.get("ip"));
+                    properties.put(mapValue.get("name")+".port",mapValue.get("port"));
+                }
+            }
             // 这个方法将Properties类对象的属性列表保存到输出流中
             // 如果comments不为空,保存后的属性文件第一行会是#comments,表示注释信息;如果为空则没有注释信息。
             // 注释信息后面是属性文件的当前保存时间信息
@@ -68,8 +80,8 @@ public class ServicePropertyController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //返回1 表示成功
-        return 1;
+        //无返回值
+        return ;
     }
 
 
