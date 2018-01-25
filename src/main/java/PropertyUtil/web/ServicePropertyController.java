@@ -2,11 +2,11 @@ package PropertyUtil.web;
 
 
 import PropertyUtil.entity.ServicePropertyUtil;
+import PropertyUtil.util.OrderedProperties;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
 
@@ -43,13 +43,14 @@ public class ServicePropertyController {
     public void saveProperty(@RequestBody Map<String, Object> map){
 
         logger.info("读写properties文件");
-        Properties properties = new Properties();
+        // 重写properties方法 使其能顺序加载
+        OrderedProperties orderedProperties = new OrderedProperties();
 
         try {
             // 读取指定属性文件 通过类加载器进行获取properties文件流
             InputStream in = ServicePropertyController.class.getClassLoader().getResourceAsStream(readPath);
             // 加载属性文件
-            properties.load(in);
+            orderedProperties.load(in);
             // 关闭流
             in.close();
             // 设置输出流、输出文件路径；true表示追加方式打开
@@ -62,15 +63,15 @@ public class ServicePropertyController {
                     // listValue是一个List集合，将List转换成Map
                     Map mapValue = (Map)listValue;
                     // 写入properties文件
-                    properties.put(mapValue.get("name")+".name",mapValue.get("name"));
-                    properties.put(mapValue.get("name")+".ip",mapValue.get("ip"));
-                    properties.put(mapValue.get("name")+".port",mapValue.get("port"));
+                    orderedProperties.put(mapValue.get("name")+".name",mapValue.get("name"));
+                    orderedProperties.put(mapValue.get("name")+".ip",mapValue.get("ip"));
+                    orderedProperties.put(mapValue.get("name")+".port",mapValue.get("port"));
                 }
             }
             // 这个方法将Properties类对象的属性列表保存到输出流中
             // 如果comments不为空,保存后的属性文件第一行会是#comments,表示注释信息;如果为空则没有注释信息。
             // 注释信息后面是属性文件的当前保存时间信息
-            properties.store(fos,null);
+            orderedProperties.store(fos,null);
 
             // 关闭流
             fos.close();
