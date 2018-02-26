@@ -4,14 +4,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
+
 /**
  * 标记这个类是一个Handler处理器
  */
 @Controller
+@RequestMapping(value = "/")
 public class LoginHandlerAction {
 
 
-    @RequestMapping("/hello")
+//    @RequestMapping("/hello")
     public String hello(Model model){
         String message = "登录认证成功";
         //为model添加Attribute

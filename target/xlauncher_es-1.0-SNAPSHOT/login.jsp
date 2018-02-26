@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" import="LoginAuth.Token" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
     String path = request.getContextPath();
@@ -24,10 +24,18 @@
 </head>
 
 <body>
-<form action="${pageContext.request.contextPath}/login.action" method="post">
-    用户名:<input type="text" name="username" /><br/><br/>
-    密  码:<input type="text" name="password" /><br/><br/>
+<form action="/users/login" method="post">
+    用户名:<input type="text" name="userName" /><br/><br/>
+    密  码:<input type="text" name="passWord" /><br/><br/>
     <input type="submit" value="登录" />
+    <input type="text" id="a1">
+    <input type="text" id="a2">
 </form>
 </body>
 </html>
+<script>
+    var a1 = documnet.getElementById('a1').value;
+    var a2 = documnet.getElementById('a2').value;
+    var json = {'userName':a1,'passWord':a2};
+
+</script>

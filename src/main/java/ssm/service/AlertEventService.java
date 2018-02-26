@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ssm.entity.AlertEvent;
 import ssm.entity.EventData;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -15,8 +16,14 @@ public interface AlertEventService {
      * @param alertEvent
      * @return 插入状态码，成功返回1
      */
-    public int addEvent(AlertEvent alertEvent);
+    public int addEvent(AlertEvent alertEvent) ;
 
+    /**
+     * 批量添加事件
+     * @param alertEventList
+     * @return 插入状态码，成功返回1
+     */
+    public int addEventList(List<AlertEvent> alertEventList);
 
     /**
      * 添加事件状态
@@ -28,19 +35,27 @@ public interface AlertEventService {
 
     /**
      * 查询事件，根据event_id获取事件信息
-     * @param event_id
+     * @param eventId
      * @return 查到的事件的AlertEvent对象
      */
 
-    public AlertEvent getEventById(int event_id);
+    public AlertEvent getEventById(int eventId);
 
     /**
-     * 查询事件，根据event_id获取大于等于id的事件信息
-     * @param event_id
+     * 查询事件，根据cam_id获取事件信息
+     * @param camId
      * @return 查到的事件的AlertEvent对象
      */
 
-    public List<AlertEvent> getEventBy2Id(int event_id);
+    public List<AlertEvent> getEventByCamId(int camId);
+
+    /**
+     * 查询事件，根据eventStartTime获取事件信息
+     * @param eventStartTime
+     * @return 查到的事件的AlertEvent对象
+     */
+
+    public List<AlertEvent> getEventByStartTime(String eventStartTime);
 
     /**
      * 查询所有事件信息
@@ -50,7 +65,9 @@ public interface AlertEventService {
 
 
     /**
-     * 输入一些参数查询事件信息
+     * 多条件模糊查询事件信息
      */
-    public List<EventData> getEventFromParam(List<String> alertEvent);
+    public List<EventData> getEventFromParam(String key);
+
+
 }

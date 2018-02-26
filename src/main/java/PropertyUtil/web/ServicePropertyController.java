@@ -17,17 +17,16 @@ import java.util.*;
  */
 
 @Controller
-@RequestMapping("/pro")
+@RequestMapping("/service")
 public class ServicePropertyController {
 
 
     /**
      * 不需要注入工具类对象，直接调用静态方法进行获取，而且只加载一次，效率很高
      */
-
-     private static Logger logger = Logger.getLogger(ServicePropertyController.class);
-     private String readPath = "aa.properties";
-     private String writePath = "D:\\Launcher\\resources\\ab.properties";
+    private static Logger logger = Logger.getLogger(ServicePropertyController.class);
+    private String readPath = ServicePropertyController.class.getClassLoader().getResource("service.properties").getPath();
+    private String writePath = ServicePropertyController.class.getClassLoader().getResource("service.properties").getPath();
 
 
     /**
@@ -39,7 +38,7 @@ public class ServicePropertyController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public void saveProperty(@RequestBody Map<String, Object> map){
 
         logger.info("读写properties文件");
@@ -56,23 +55,27 @@ public class ServicePropertyController {
             // 设置输出流、输出文件路径；true表示追加方式打开
             FileOutputStream  fos = new FileOutputStream(writePath,true);
 
-            // 迭代循环里面的数据
-            for(String eachKey : map.keySet()){
-                // 循环得到所有的Key
-                for (Object listValue: (ArrayList)map.get(eachKey)) {
-                    // listValue是一个List集合，将List转换成Map
-                    Map mapValue = (Map)listValue;
-                    // 写入properties文件
-                    orderedProperties.put(mapValue.get("name")+".name",mapValue.get("name"));
-                    orderedProperties.put(mapValue.get("name")+".ip",mapValue.get("ip"));
-                    orderedProperties.put(mapValue.get("name")+".port",mapValue.get("port"));
-                }
-            }
+            orderedProperties.put(map.get("serName")+".name",map.get("serName"));
+            orderedProperties.put(map.get("serName")+".ip",map.get("serIp"));
+            orderedProperties.put(map.get("serName")+".port",map.get("serPort"));
+
+//            // 迭代循环里面的数据
+//            for(String eachKey : map.keySet()){
+//                // 循环得到所有的Key
+//                for (Object listValue: (ArrayList)map.get(eachKey)) {
+//                    // listValue是一个List集合，将List转换成Map
+//                    Map mapValue = (Map)listValue;
+//                    // 写入properties文件
+////                    orderedProperties.put(mapValue.get("serId")+".id",mapValue.get("serId"));
+//                    orderedProperties.put(mapValue.get("serName")+".name",mapValue.get("serName"));
+//                    orderedProperties.put(mapValue.get("serName")+".ip",mapValue.get("serIp"));
+//                    orderedProperties.put(mapValue.get("serName")+".port",mapValue.get("serPort"));
+//                }
+//            }
             // 这个方法将Properties类对象的属性列表保存到输出流中
             // 如果comments不为空,保存后的属性文件第一行会是#comments,表示注释信息;如果为空则没有注释信息。
             // 注释信息后面是属性文件的当前保存时间信息
             orderedProperties.store(fos,null);
-
             // 关闭流
             fos.close();
 

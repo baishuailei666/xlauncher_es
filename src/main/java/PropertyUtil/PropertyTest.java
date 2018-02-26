@@ -4,7 +4,6 @@ import PropertyUtil.util.OrderedProperties;
 
 import java.io.*;
 import java.util.Iterator;
-import java.util.Properties;
 
 /**
  *  读写文件
@@ -15,7 +14,7 @@ public class PropertyTest {
 //        Properties properties = new Properties();
         // 重写Properties方法 使其能顺序加载
         OrderedProperties orderedProperties = new OrderedProperties();
-        String fileIn = "aa.properties";
+        String fileIn = "service.properties";
         String fileTo = "ab.properties";
         try{
             // 读取指定属性文件 通过类加载器进行获取properties文件流

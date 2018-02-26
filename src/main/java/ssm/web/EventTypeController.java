@@ -16,7 +16,7 @@ import java.util.Map;
  * 事件类型操作控制器
  */
 @Controller
-@RequestMapping(value = "/es_event_type")
+@RequestMapping(value = "/es/es_event_type")
 public class EventTypeController {
 
     @Autowired
@@ -59,7 +59,7 @@ public class EventTypeController {
      * @return 修改结果，修改成功返回1
      */
     @ResponseBody
-    @RequestMapping(value = "/post", method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT)
     public Map<String, Object> updateEventContent( @RequestBody EventType eventType) {
         int retUpd = this.eventTypeService.updateEventType(eventType);
         logger.info("修改事件类型信息");

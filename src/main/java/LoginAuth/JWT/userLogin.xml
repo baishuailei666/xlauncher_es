@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
+namespace是该xml对应的接口全名，select和update中的id对应方法名，resultType是返回值类型，parameterType是参数类型（这个其实可选），
+最后#{...}中填写的是方法的参数，-->
+
+<mapper namespace="LoginAuth.JWT.UserDao">
+    <!-- resultMap -->
+    <resultMap id="userResultMap" type="LoginAuth.JWT.User">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_login_name"/>
+        <result property="passWord" column="user_pwd"/>
+    </resultMap>
+    <!-- 查询user信息 -->
+    <select id="getUserInfo" resultMap="userResultMap">
+        SELECT * FROM userlogin WHERE user_login_name = #{userName}
+    </select>
+
+</mapper>

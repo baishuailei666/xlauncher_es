@@ -2,34 +2,44 @@ package PropertyUtil.entity;
 
 public class ServiceProperty {
 
-    private String name;
-    private String ip;
-    private String port;
+    private int serId;
+    private String serName;
+    private String serIp;
+    private String serPort;
 
-    public ServiceProperty(){}
+    public ServiceProperty(){
 
-
-    public String getName() {
-        return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getSerId() {
+        return serId;
     }
 
-    public String getIp() {
-        return ip;
+    public void setSerId(int serId) {
+        this.serId = serId;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public String getSerName() {
+        return serName;
     }
 
-    public String getPort() {
-        return port;
+    public void setSerName(String serName) {
+        this.serName = serName;
     }
 
-    public void setPort(String port) {
-        this.port = port;
+    public String getSerIp() {
+        return serIp;
+    }
+
+    public void setSerIp(String serIp) {
+        this.serIp = serIp;
+    }
+
+    public String getSerPort() {
+        return serPort;
+    }
+
+    public void setSerPort(String serPort) {
+        this.serPort = serPort;
     }
 }

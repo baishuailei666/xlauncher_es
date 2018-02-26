@@ -5,6 +5,7 @@
         <!-- 通过package，可以直接指定package的名字，mybatis会自动扫描你指定包下面的javabean，\
         并且默认设置了一个别名，默认的名字为：javabean的首字母小写的非限定类名来作为它的别名 -->
         <typeAlias  type="ssm.dao" />
+        <typeAlias  type="AlertEventLog.dao" />
     </typeAliases>
     <mappers>
         <mapper resource="ssm.mapping.alertEventMapper.xml"></mapper>
@@ -14,5 +15,7 @@
         <mapper resource="ssm.mapping.typeMapper.xml"></mapper>
         <mapper resource="ssm.mapping.userDataMapper.xml"></mapper>
         <mapper resource="ssm.mapping.userSubScriptMapper.xml"></mapper>
+        <mapper resource="AlertEventLog.mapping.AlertLogMapper.xml"></mapper>
+        <mapper resource="LoginAuth.JWT.userLogin.xml"></mapper>
     </mappers>
 </configuration>

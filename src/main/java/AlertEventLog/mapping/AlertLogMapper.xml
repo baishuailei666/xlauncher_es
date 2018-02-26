@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AlertEventLog.dao.AlertLogDao">
+    <resultMap id="alertLogResultMap" type="AlertEventLog.entity.AlertLog">
+        <result column="priority" property="priority" />
+        <result column="time" property="time" />
+        <result column="timespan" property="timeSpan" />
+        <result column="thread" property="thread" />
+        <result column="linenumber" property="lineNumber" />
+        <result column="filename" property="fileName" />
+        <result column="classname" property="className" />
+        <result column="methodname" property="methodName" />
+        <result column="message" property="message" />
+    </resultMap>
+
+    <!-- 创建(Create) -->
+    <insert id="addAlertLog" parameterType="AlertEventLog.entity.AlertLog">
+        insert into alert_log
+        (priority,time,timespan,thread,linenumber,filename,classname,methodname,message)
+        values
+        (#{priority},#{time},#{timeSpan},#{thread},#{lineNumber},#{fileName},#{className},#{methodName},#{message})
+    </insert>
+
+    <!-- 分页查询全部 -->
+    <select id="getAlertLogByPage" parameterType="int" resultMap="alertLogResultMap">
+        select * from alert_log limit #{startPos},10
+    </select>
+
+    <!-- 取得记录的总数 -->
+    <select id="getAlertLogCount" resultType="int">
+    SELECT count(*) FROM alert_log ;
+    </select>
+</mapper>

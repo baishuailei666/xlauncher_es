@@ -2,6 +2,11 @@ package PropertyUtil.util;
 
 import java.util.*;
 
+/**
+ * 重写Properties方法，使其能够按照顺序保存
+ * @author baishuailei
+ * @date 2018-1-25
+ */
 public class OrderedProperties extends Properties {
 
     private static final long serialVersionUID = -4627607243846121965L;

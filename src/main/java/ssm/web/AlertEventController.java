@@ -2,14 +2,17 @@ package ssm.web;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ssm.entity.AlertEvent;
+import ssm.entity.EventData;
 import ssm.service.AlertEventService;
+import ssm.utils.CustomException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 事件操作控制器
@@ -33,33 +36,172 @@ public class AlertEventController {
 
     @Autowired
     private AlertEventService alertEventService;
+
     // 添加一个记录器
     private static Logger logger = Logger.getLogger(AlertEventController.class);
 
     /**
-     * 添加事件( event_id,event_starttime,event_cam_id,type_id,event_source)
+     * 添加事件(event_starttime,event_cam_id,type_id,event_source)
      * @param alertEvent
      * @return 插入数据库操作的返回结果，成功返回1
      */
     @ResponseBody
-    @RequestMapping(value = "/info",method = RequestMethod.POST)
-    public Map<String, Object> addEvent(@RequestBody AlertEvent alertEvent) {
-        int ret = this.alertEventService.addEvent(alertEvent);
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public int addEvent(@RequestBody AlertEvent alertEvent) throws Exception{
         logger.info("添加事件告警信息");
-        Map<String, Object> retMap = new HashMap<>(1);
-        retMap.put("status", ret);
-        return retMap;
+        int addEventRet = 0;
+        // 添加事件信息
+        addEventRet = this.alertEventService.addEvent(alertEvent);
+        // 判断添加事件信息状态，添加成功则转发给CMS，添加失败则报异常
+        if (addEventRet != 1) {
+            // 添加失败则报异常
+            logger.error("添加事件告警信息失败");
+            throw new CustomException("添加事件告警信息失败！");
+        }
+
+        // 转发给CMS
+        AlertRestTemplate alertRestTemplate = new AlertRestTemplate();
+        try {
+            // 转发对象的接口
+            /**
+             *
+             * 这里路径写死了，改成从配置文件读取
+             *
+             */
+            String postUrl = "http://8.16.0.41:8080/cms/alert";
+            // 转发的状态信息
+            int restRet = alertRestTemplate.postForObject(alertEvent,postUrl);
+            AlertEvent alertEventStatus = new AlertEvent();
+            alertEventStatus.setEventStartTime(alertEvent.getEventStartTime());
+
+            // 判断转发的状态
+            if (restRet == 200) {
+                // 转发推送成功则回写数据库已推送
+                alertEventStatus.setEventPushStatus("已推送");
+                this.alertEventService.updateEventStatus(alertEventStatus);
+            } else {
+                logger.error("推送失败"+restRet);
+                // 转发推送失败则回写数据库未推送
+                alertEventStatus.setEventPushStatus("未推送");
+                this.alertEventService.updateEventStatus(alertEventStatus);
+
+//                    // 并每隔一段时间重新转发推送直到成功
+//                    Timer againTime = new Timer();
+//                    // TimerTask(){}第一个参数是要操作的方法，第二个参数是要设定的延迟时间，第三个参数是周期的设定
+//                    againTime.schedule(new TimerTask() {// 需要每隔30秒重新推送
+//
+//                        public AlertEventService alertEventService;
+//
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                int againRestRet =  alertRestTemplate.postForObject(alertEventList,postUrl);
+//                                if (againRestRet == 200){
+//                                    alertEventStatus.setEventPushStatus("已推送");
+//                                    this.alertEventService.updateEventStatus(alertEventStatus);
+//                                    System.exit(0);// 调用System.exit方法，使整个程序（线程）终止
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                logger.error(e);
+//                            }
+//                        }
+//                    }, 30000, 30000);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 返回状态添加成功
+        return addEventRet;
     }
 
 
+//    /**
+//     * 批量添加事件(event_starttime,event_cam_id,type_id,event_source)
+//     * @param alertEventList
+//     * @return 插入数据库操作的返回结果，成功返回1
+//     */
+//    @ResponseBody
+//    @RequestMapping(value = "/list", method = RequestMethod.POST)
+//    public int addEventList(@RequestBody List<AlertEvent> alertEventList) throws Exception{
+//        logger.info("添加事件告警信息");
+//        int addEventRet = 0;
+//        // 循环迭代List<AlertEvent> 得到每一个AlertEvent
+//        for (int indexList=0; indexList<alertEventList.size(); indexList++) {
+//            // 添加事件信息
+//             addEventRet = this.alertEventService.addEvent(alertEventList.get(indexList));
+//            // 判断添加事件信息状态，添加成功则转发给CMS，添加失败则报异常
+//            if (addEventRet != 1) {
+//                // 添加失败则报异常
+//                logger.error("添加事件告警信息失败");
+//                throw new CustomException("添加事件告警信息失败！");
+//            }
+//
+//            // 转发给CMS
+//            AlertRestTemplate alertRestTemplate = new AlertRestTemplate();
+//            try {
+//                // 转发对象的接口
+////                String postUrl = "http://8.11.0.11:8080/cms/alert";
+//                String postUrl = "http://8.11.0.7:8080/es/es_alert_event/getAll";
+//                // 转发的状态信息
+//                int restRetList = alertRestTemplate.postForObjectList(alertEventList,postUrl);
+//                AlertEvent alertEventStatusList = new AlertEvent();
+//                alertEventStatusList.setEventStartTime(alertEventList.get(indexList).getEventStartTime());
+//
+//                // 判断转发的状态
+//                if (restRetList == 200) {
+//                    // 转发推送成功则回写数据库已推送
+//                    alertEventStatusList.setEventPushStatus("已推送");
+//                    this.alertEventService.updateEventStatus(alertEventStatusList);
+//                } else {
+//                    logger.error("推送失败"+restRetList);
+//                    // 转发推送失败则回写数据库未推送
+//                    alertEventStatusList.setEventPushStatus("未推送");
+//                    this.alertEventService.updateEventStatus(alertEventStatusList);
+//
+////                    // 并每隔一段时间重新转发推送直到成功
+////                    Timer againTime = new Timer();
+////                    // TimerTask(){}第一个参数是要操作的方法，第二个参数是要设定的延迟时间，第三个参数是周期的设定
+////                    againTime.schedule(new TimerTask() {// 需要每隔30秒重新推送
+////
+////                        public AlertEventService alertEventService;
+////
+////                        @Override
+////                        public void run() {
+////                            try {
+////                                int againRestRet =  alertRestTemplate.postForObject(alertEventList,postUrl);
+////                                if (againRestRet == 200){
+////                                    alertEventStatus.setEventPushStatus("已推送");
+////                                    this.alertEventService.updateEventStatus(alertEventStatus);
+////                                    System.exit(0);// 调用System.exit方法，使整个程序（线程）终止
+////                                }
+////                            } catch (Exception e) {
+////                                e.printStackTrace();
+////                                logger.error(e);
+////                            }
+////                        }
+////                    }, 30000, 30000);
+//
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        // 返回状态添加成功
+//        return addEventRet;
+//    }
+
+
     /**
-     * 添加事件状态(event_status,event_endtime)
+     * 添加事件状态(event_id,event_push_status)
      * 返回ID
      * @param alertEvent
      * @return 插入数据库操作的返回结果，成功返回1
      */
     @ResponseBody
-    @RequestMapping(value = "/status",method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT)
     public Map<String, Object> updateEventStatus(@RequestBody AlertEvent alertEvent) {
         int ret = this.alertEventService.updateEventStatus(alertEvent);
         logger.info("添加事件状态");
@@ -78,24 +220,41 @@ public class AlertEventController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public AlertEvent getEventById(@PathVariable("id") String id) {
 
-        int event_id = Integer.parseInt(id);
-        logger.info("根据ID:"+event_id +"查询事件信息");
-        AlertEvent alertEvent = this.alertEventService.getEventById(event_id);
+        int eventId = Integer.parseInt(id);
+        logger.info("根据ID:"+eventId +"查询事件信息");
+        AlertEvent alertEvent = this.alertEventService.getEventById(eventId);
         return alertEvent;
     }
 
     /**
-     * 根据编号ID查询事件范围
+     * 根据Cam_id查询事件
      * @param id
      * @return 返回查询的事件，为空返回null
      */
     @ResponseBody
-    @RequestMapping(value = "/gt=/{id}", method = RequestMethod.GET)
-    public Map<String, Object> getEventBy2Id(@PathVariable("id") String id) {
+    @RequestMapping(value = "/cam/{id}", method = RequestMethod.GET)
+    public Map<String, Object> getEventByCamId(@PathVariable("id") String id) {
 
-        int event_id = Integer.parseInt(id);
-        logger.info("根据ID:"+event_id +"查询大于等于事件范围信息");
-        List<AlertEvent> lstEvents = this.alertEventService.getEventBy2Id(event_id);
+        int camId = Integer.parseInt(id);
+        logger.info("根据cam_id:"+camId +"查询事件信息");
+        List<AlertEvent> lstEvents = this.alertEventService.getEventByCamId(camId);
+        Map<String, Object> eventMap = new HashMap<>(2);
+        eventMap.put("eventList", lstEvents);
+        return eventMap;
+    }
+
+
+    /**
+     * 根据eventStartTime查询事件
+     * @param eventStartTime
+     * @return 返回查询的事件，为空返回null
+     */
+    @ResponseBody
+    @RequestMapping(value = "/startTime/{eventStartTime}", method = RequestMethod.GET)
+    public Map<String, Object> getEventByStartTime(@PathVariable("eventStartTime") String eventStartTime){
+
+        logger.info("根据startTime:"+eventStartTime+"查询事件信息");
+        List<AlertEvent> lstEvents = this.alertEventService.getEventByStartTime(eventStartTime);
         Map<String, Object> eventMap = new HashMap<>(2);
         eventMap.put("eventList", lstEvents);
         return eventMap;
@@ -114,6 +273,22 @@ public class AlertEventController {
         eventMap.put("eventList", lstEvents);
         return eventMap;
     }
+
+    /**
+     * 多条件模糊查询事件的信息
+     * @return 事件信息的列表
+     */
+    @ResponseBody
+    @RequestMapping(value ="/param/{key}" ,method = RequestMethod.GET)
+    public Map<String, Object> getEventFromParam(@PathVariable("key") String key) {
+        logger.info("多条件模糊查询事件的信息");
+        List<EventData> lstEvents = this.alertEventService.getEventFromParam(key);
+        Map<String, Object> eventMap = new HashMap<>(2);
+        eventMap.put("eventList", lstEvents);
+        return eventMap;
+    }
+
+
 
 
     /**

@@ -57,6 +57,12 @@ public class UserInfoController {
         return "user";
     }
 
+    @RequestMapping(value = "/getOneUser/{key}", method = RequestMethod.GET)
+    public UserInfo getOneUser(@PathVariable("key") String key){
+
+        UserInfo userInfo = iUserInfoService.getOneUser(key);
+        return userInfo;
+    }
 
     @RequestMapping(value = "/getJson",method = RequestMethod.GET,produces = "text/html;charset=utf-8")
     public @ResponseBody List<UserInfo> list(){
@@ -76,7 +82,7 @@ public class UserInfoController {
 
 
 
-        @RequestMapping(value = "/hello",method = RequestMethod.GET)
+//    @RequestMapping(value = "/hello",method = RequestMethod.GET)
     public String printHello(ModelMap modelMap){
         //创建模型跟视图，用于渲染页面。并且指定要返回的页面为done页面
         // 使用@ModelAttribute 和 @SessionAttribute传递和保存数据

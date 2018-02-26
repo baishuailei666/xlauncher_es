@@ -33,15 +33,32 @@ public class UserInfoServiceImpl implements IUserInfoService {
 
 
     public void add(UserInfo userInfo) {
-        iUserInfoDao.add(userInfo);
+
+        try {
+            iUserInfoDao.add(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<UserInfo> getAllUsers(){
-        return iUserInfoDao.getAllUsers();
+
+        try {
+            return iUserInfoDao.getAllUsers();
+        } catch (Exception e) {
+            System.out.println("查询用户信息失败");
+        }
+        return null;
     }
 
-    public void getOneUser(String name) {
+    public UserInfo getOneUser(String key) {
 
+        try {
+            return iUserInfoDao.getOneUser(key);
+        } catch (Exception e) {
+            System.out.println("根据关键字查询用户信息失败");
+        }
+        return null;
     }
 
 

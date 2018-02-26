@@ -13,7 +13,13 @@ namespace是该xml对应的接口全名，select和update中的id对应方法名
     </select>
 
     <select id="getOneUser" resultType="ssm.entity.UserInfo">
-        SELECT * FROM userinfo WHERE name=#{NAME }
+        SELECT * FROM userinfo WHERE id LIKE CONCAT('%',#{key},'%')
+        OR name LIKE CONCAT('%',#{key},'%')
+        OR age LIKE CONCAT('%',#{key},'%')
+        OR address LIKE CONCAT('%',#{key},'%')
+        OR money LIKE CONCAT('%',#{key},'%')
+        OR "time" LIKE CONCAT('%',#{key},'%')
+        OR sport LIKE CONCAT('%',#{key},'%')
     </select>
 
     <insert id="add" parameterType="ssm.entity.UserInfo" >

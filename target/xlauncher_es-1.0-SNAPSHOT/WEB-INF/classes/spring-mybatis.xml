@@ -11,12 +11,16 @@
                         http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 自动扫描 -->
-    <context:component-scan base-package="ssm.dao"/>
     <!-- 扫描PropertyUtil包下所有使用注解的类型 -->
+    <context:component-scan base-package="ssm.dao"/>
     <context:component-scan base-package="PropertyUtil.service"/>
     <!-- 扫描service包下所有使用注解的类型-->
     <context:component-scan base-package="ssm.service"/>
-
+    <!-- 扫描AlertEventLog包下所有使用注解的类型 -->
+    <context:component-scan base-package="AlertEventLog.dao"/>
+    <context:component-scan base-package="AlertEventLog.service"/>
+    <context:component-scan base-package="AlertEventLog.util"/>
+    <context:component-scan base-package="LoginAuth.JWT"/>
 
 
     <!-- 第一种方式：加载一个properties文件 -->
@@ -72,7 +76,14 @@
         <!--注入数据库连接池-->
         <property name="dataSource" ref="dataSource"/>
         <!-- 自动扫描mapping.xml文件 只有一个文件可以直接写死-->
-        <property name="mapperLocations" value="classpath*:ssm/mapping/*.xml"></property>
+        <property name="mapperLocations" >
+            <!-- 多个文件 -->
+            <array>
+                <value>classpath*:ssm/mapping/*.xml</value>
+                <value>classpath*:AlertEventLog/mapping/*.xml</value>
+                <value>classpath*:LoginAuth/JWT/*.xml</value>
+            </array>
+        </property>
     </bean>
 
 
@@ -124,6 +135,16 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
 
+    <bean id="alertLogDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="AlertEventLog.dao.AlertLogDao"></property>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>
+
+    <bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="LoginAuth.JWT.UserDao"></property>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>
+
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <property name="messageConverters">
@@ -151,10 +172,12 @@
             <tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
+
     <!-- aop配置 -->
     <aop:config>
         <aop:pointcut expression="execution(* *..service.*.*(..))" id="stockPointcut"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="stockPointcut"/>
     </aop:config>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
 </beans>

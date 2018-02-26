@@ -5,32 +5,40 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_3_0.xsd">
 
-
   <!-- 针对Spring配置：读取配置文件 -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring-mybatis.xml</param-value>
   </context-param>
 
-
   <!-- 针对log4j配置：读取配置文件 -->
   <context-param>
     <param-name>log4jConfigLocation</param-name>
     <param-value>classpath:log4j.properties</param-value>
   </context-param>
-
+  <!-- 定义WebAppRootKey可以在运行时动态的找出项目的路径-->
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>amt.root</param-value>
+  </context-param>
+  <!--定义LOG4J监听器-->
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
 
   <!-- 注册ServletContext监听器，创建容器对象，spring监听器 -->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
-
   <!-- 防止spring内存溢出监听器，比如quartz -->
   <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
   </listener>
-
+  <!-- 用于启动告警日志监听模块,目前还存在问题，打开后会不断的创建 -->
+  <listener>
+    <listener-class>AlertEventLog.util.AlertLog.SocketServiceLoader</listener-class>
+  </listener>
 
   <!-- 针对SpringMVC的配置：：：：中央调度器：本质上是一个Servlet 配置的关于SpringMVC组件 -->
   <servlet>

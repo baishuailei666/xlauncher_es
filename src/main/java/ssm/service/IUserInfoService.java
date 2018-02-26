@@ -15,6 +15,6 @@ public interface IUserInfoService {
 
     public List<UserInfo> getAllUsers();
 
-    public void getOneUser(String name);
+    public UserInfo getOneUser(String key);
 
 }

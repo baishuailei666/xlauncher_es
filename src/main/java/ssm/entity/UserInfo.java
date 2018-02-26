@@ -1,9 +1,6 @@
 package ssm.entity;
 
 
-
-
-
 public class UserInfo {
 
     private int id;

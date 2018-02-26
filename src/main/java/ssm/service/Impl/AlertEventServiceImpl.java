@@ -7,7 +7,9 @@ import ssm.dao.AlertEventDao;
 import ssm.entity.AlertEvent;
 import ssm.entity.EventData;
 import ssm.service.AlertEventService;
+import ssm.utils.CustomException;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,15 +30,43 @@ public class AlertEventServiceImpl implements AlertEventService {
     @Qualifier("alertEventDao")
     private AlertEventDao alertEventDao;
 
-    public void setAlertEventDao(AlertEventDao alertEventDao){this.alertEventDao=alertEventDao;}
+    public void setAlertEventDao(AlertEventDao alertEventDao){
+        this.alertEventDao=alertEventDao;
+    }
 
     /**
-     * 添加用户
+     * 添加事件
      * @param alertEvent
      * @return 插入状态码，成功返回1
      */
     public int addEvent(AlertEvent alertEvent){
-        return this.alertEventDao.addEvent(alertEvent);
+        int ret = this.alertEventDao.addEvent(alertEvent);
+        if (ret != 1){
+            try {
+                throw new CustomException("添加事件信息失败!");
+            } catch (CustomException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * 批量添加事件
+     * @param alertEventList
+     * @return 插入状态码，成功返回1
+     */
+    @Override
+    public int addEventList(List<AlertEvent> alertEventList) {
+        int ret = this.alertEventDao.addEventList(alertEventList);
+        if (ret != 1){
+            try {
+                throw new CustomException("添加事件信息失败!");
+            } catch (CustomException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
     }
 
     /**
@@ -50,25 +80,31 @@ public class AlertEventServiceImpl implements AlertEventService {
 
 
     /**
-     * 查询用户，根据event_id获取事件信息
-     * @param event_id
+     * 查询事件，根据event_id获取事件信息
+     * @param eventId
      * @return 查到的事件的AlertEvent对象
      */
-
-    public AlertEvent getEventById(int event_id){
-        return this.alertEventDao.getEventById(event_id);
+    public AlertEvent getEventById(int eventId){
+        return this.alertEventDao.getEventById(eventId);
     }
 
     /**
-     * 查询事件，根据event_id获取大于等于id的事件信息
-     * @param event_id
+     * 查询事件，根据cam_id获取事件信息
+     * @param camId
      * @return 查到的事件的AlertEvent对象
      */
-
-    public List<AlertEvent> getEventBy2Id(int event_id){
-        return this.alertEventDao.getEventBy2Id(event_id);
+    public List<AlertEvent> getEventByCamId(int camId){
+        return this.alertEventDao.getEventByCamId(camId);
     }
 
+    /**
+     * 查询事件，根据eventStartTime获取事件信息
+     * @param eventStartTime
+     * @return 查到的事件的AlertEvent对象
+     */
+    public List<AlertEvent> getEventByStartTime(String eventStartTime){
+        return this.alertEventDao.getEventByStartTime(eventStartTime);
+}
 
     /**
      * 查询所有事件信息
@@ -82,11 +118,10 @@ public class AlertEventServiceImpl implements AlertEventService {
 
 
     /**
-     * 输入一些参数查询事件信息
+     * 多条件模糊查询事件信息
      */
-    public List<EventData> getEventFromParam(List<String> alertEvent){
-        return this.getEventFromParam(alertEvent);
+    public List<EventData> getEventFromParam(String key){
+        return this.alertEventDao.getEventFromParam(key);
     }
-
 
 }

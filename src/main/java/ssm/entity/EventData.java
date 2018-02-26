@@ -6,87 +6,81 @@ package ssm.entity;
  */
 public class EventData {
     //实体类的属性和表中字段一致
-
-    private int event_id;   //事件信息编号
-    private String event_starttime; //事件发生时间
-    private String type_description;    //事件信息类型描述
-    //private String content_description; //事件信息内容描述
-    //private String event_location;  //事件发生地点或区域
-    private int event_cam_id;   //事件发生对应的摄像头编号
-    private String event_source;    //事件发生资源描述
-    private String event_status;    //事件信息状态
-    //private String event_push_status;   //事件推送状态
-    private String event_endtime;   //事件处理时间
+    private int eventId;   //事件信息编号
+    private String eventStartTime; //事件发生时间
+    private String typeDescription;    //事件信息类型描述
+    private int camId;   //事件发生对应的摄像头编号
+    private String eventSource;    //事件发生资源描述
+    private String eventPushStatus;   //事件推送状态
 
     public EventData(){
 
     }
 
-    public int getEvent_id() {
-        return event_id;
+    public EventData(int eventId, String eventStartTime, String typeDescription, int camId, String eventSource, String eventPushStatus) {
+        this.eventId = eventId;
+        this.eventStartTime = eventStartTime;
+        this.typeDescription = typeDescription;
+        this.camId = camId;
+        this.eventSource = eventSource;
+        this.eventPushStatus = eventPushStatus;
     }
 
-    public void setEvent_id(int event_id) {
-        this.event_id = event_id;
+    public int getEventId() {
+        return eventId;
     }
 
-    public String getEvent_starttime() {
-        return event_starttime;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
-    public void setEvent_starttime(String event_starttime) {
-        this.event_starttime = event_starttime;
+    public String getEventStartTime() {
+        return eventStartTime;
     }
 
-
-    public int getEvent_cam_id() {
-        return event_cam_id;
+    public void setEventStartTime(String eventStartTime) {
+        this.eventStartTime = eventStartTime;
     }
 
-    public void setEvent_cam_id(int event_cam_id) {
-        this.event_cam_id = event_cam_id;
+    public String getTypeDescription() {
+        return typeDescription;
     }
 
-    public String getType_description() {
-        return type_description;
+    public void setTypeDescription(String typeDescription) {
+        this.typeDescription = typeDescription;
     }
 
-    public void setType_description(String type_description) {
-        this.type_description = type_description;
+    public int getCamId() {
+        return camId;
     }
 
-
-    public String getEvent_source() {
-        return event_source;
+    public void setCamId(int camId) {
+        camId = camId;
     }
 
-    public void setEvent_source(String event_source) {
-        this.event_source = event_source;
+    public String getEventSource() {
+        return eventSource;
     }
 
-    public String getEvent_status() {
-        return event_status;
+    public void setEventSource(String eventSource) {
+        this.eventSource = eventSource;
     }
 
-    public void setEvent_status(String event_status) {
-        this.event_status = event_status;
+    public String getEventPushStatus() {
+        return eventPushStatus;
     }
 
-
-    public String getEvent_endtime() {
-        return event_endtime;
+    public void setEventPushStatus(String eventPushStatus) {
+        this.eventPushStatus = eventPushStatus;
     }
 
-    public void setEvent_endtime(String event_endtime) {
-        this.event_endtime = event_endtime;
-    }
 
     @Override
     public String toString() {
 
-        return "事件编号："+event_id+"  事件发生时间："+event_starttime+
-                "事件类型："+type_description+" 事件对应摄像头编号："+event_cam_id+
-                "事件资源："+event_source+"  事件状态："+event_status+" + 事件处理时间："+event_endtime+" ";
+        return "事件编号："+eventId+"  事件发生时间："+eventStartTime+
+                "事件类型："+typeDescription+" 事件对应摄像头编号："+camId+
+                "事件资源："+eventSource+"  事件推送状态："+eventPushStatus+" ";
 
     }
 }

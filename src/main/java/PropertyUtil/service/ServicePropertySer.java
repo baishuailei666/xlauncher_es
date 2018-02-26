@@ -13,9 +13,6 @@ import java.util.Properties;
 public interface ServicePropertySer {
 
 
-
-
-
     /**
      *  实现获取properties文件所有内容
      *  @return

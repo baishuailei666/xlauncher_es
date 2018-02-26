@@ -21,6 +21,7 @@ public class ServicePropertyUtil {
     private static final Logger logger = Logger.getLogger(ServicePropertyUtil.class);
     private static Properties properties;
 
+
     static {
         loadProperties();
     }
@@ -29,10 +30,11 @@ public class ServicePropertyUtil {
         logger.info("开始加载文件内容...");
         properties = new Properties();
         InputStream inputStream = null;
+        String readPath = "service.properties";
 
         try{
             // 第一种，通过类加载器进行获取properties文件流
-            inputStream = ServicePropertyUtil.class.getClassLoader().getResourceAsStream("aa.properties");
+            inputStream = ServicePropertyUtil.class.getClassLoader().getResourceAsStream(readPath);
 
             // 第二种，通过类进行properties文件流
             //inputStream = ServicePropertyUtil.class.getResourceAsStream("/jdbc.properties");
@@ -40,10 +42,8 @@ public class ServicePropertyUtil {
             properties.load(inputStream);
 
         } catch (FileNotFoundException e){
-
-            logger.error("jdbc.properties文件未找到！");
+            logger.error("properties文件未找到！");
         } catch (IOException e) {
-
             logger.error("出现IOException异常！");
         } finally {
             try{
@@ -51,11 +51,9 @@ public class ServicePropertyUtil {
                     inputStream.close();
                 }
             } catch (IOException e){
-
-                logger.error("jdbc.properties文件流关闭出现异常！");
+                logger.error("properties文件流关闭出现异常！");
             }
         }
-
         logger.info("加载properties文件内容完成...");
         logger.info("properties文件内容："+properties);
     }
